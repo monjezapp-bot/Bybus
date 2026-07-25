@@ -26,8 +26,7 @@ jobs:
 
       - run: npm install
 
-      - name: تثبيت حزمة الويب وبناء المشروع
-        run: npx expo install react-native-web react-dom && npx expo export --platform web
+      - run: npx expo export --platform web
         env:
           EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
           EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
@@ -47,16 +46,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
-        
