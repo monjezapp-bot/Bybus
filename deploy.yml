@@ -1,0 +1,57 @@
+name: نشر تطبيق ولي الأمر (نسخة الويب) على GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: تحميل الكود
+        uses: actions/checkout@v4
+
+      - name: تجهيز Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: تحميل المكتبات
+        run: npm install
+
+      - name: بناء نسخة الويب
+        run: npx expo export --platform web
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: ${{ secrets.EXPO_PUBLIC_SUPABASE_URL }}
+          EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+
+      # مهم جداً: GitHub Pages بيشغّل Jekyll تلقائياً، وJekyll بيتجاهل أي مجلد
+      # اسمه يبدأ بـ underscore (زي مجلد _expo اللي Expo بيطلعه) - الملف ده بيقفل Jekyll تماماً
+      - name: منع Jekyll من تجاهل ملفات Expo
+        run: touch ./dist/.nojekyll
+
+      - name: تجهيز الملفات للنشر
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: النشر على GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -8,6 +8,13 @@
     "splash": {
       "backgroundColor": "#EAF6FC"
     },
+    "web": {
+      "output": "single",
+      "bundler": "metro"
+    },
+    "experiments": {
+      "baseUrl": "/bybus-parent-app"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bybus.parent"
