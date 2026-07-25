@@ -1,0 +1,19 @@
+{
+  "expo": {
+    "name": "Bybus - ولي الأمر",
+    "slug": "bybus-parent-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#EAF6FC"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bybus.parent"
+    },
+    "android": {
+      "package": "com.bybus.parent"
+    }
+  }
+}
